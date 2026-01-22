@@ -968,12 +968,12 @@ case 'menu': {
       buttons: [
         {
           buttonId: `${config.PREFIX}quick_commands`,
-          buttonText: { displayText: '🚀 𝐒ᴇʟᴇᴄᴛ 𝐀 𝐂ᴀᴛᴇɢᴏʀʏ' },
+          buttonText: { displayText: '🚀 𝑺𝑬𝑳𝑬𝑪𝑻 𝑨 𝑪𝑨𝑻𝑬𝑮𝑶𝑹𝒀' },
           type: 4,
           nativeFlowInfo: {
             name: 'single_select',
             paramsJson: JSON.stringify({
-              title: '🚀 𝐒ᴇʟᴇᴄᴛ 𝐀 𝐂ᴀᴛᴇɢᴏʀʏ',
+              title: '🚀 𝑺𝑬𝑳𝑬𝑪𝑻 𝑨 𝑪𝑨𝑻𝑬𝑮𝑶𝑹𝒀',
               sections: [
                 {
                   title: "🌐 ɢᴇɴᴇʀᴀʟ ᴄᴏᴍᴍᴀɴᴅs",
