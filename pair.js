@@ -333,6 +333,36 @@ async function setupStatusHandlers(socket) {
                 }
             }
            
+// Auto-react to messages if enabled
+if (config.AUTO_REACT === 'true' && !msg.key.fromMe) {
+    try {
+        const reactions = [
+            '🌼', '❤️', '💐', '🔥', '🏵️', '❄️', '🧊', '🐳', '💥', '🥀', '❤‍🔥', '🥹', '😩', '🫣', 
+            '🤭', '👻', '👾', '🫶', '😻', '🙌', '🫂', '🫀', '👩‍🦰', '🧑‍🦰', '👩‍⚕️', '🧑‍⚕️', '🧕', 
+            '👩‍🏫', '👨‍💻', '👰‍♀', '🦹🏻‍♀️', '🧟‍♀️', '🧟', '🧞‍♀️', '🧞', '🙅‍♀️', '💁‍♂️', '💁‍♀️', '🙆‍♀️', 
+            '🙋‍♀️', '🤷', '🤷‍♀️', '🤦', '🤦‍♀️', '💇‍♀️', '💇', '💃', '🚶‍♀️', '🚶', '🧶', '🧤', '👑', 
+            '💍', '👝', '💼', '🎒', '🥽', '🐻', '🐼', '🐭', '🐣', '🪿', '🦆', '🦊', '🦋', '🦄', 
+            '🪼', '🐋', '🐳', '🦈', '🐍', '🕊️', '🦦', '🦚', '🌱', '🍃', '🎍', '🌿', '☘️', '🍀', 
+            '🍁', '🪺', '🍄', '🍄‍🟫', '🪸', '🪨', '🌺', '🪷', '🪻', '🥀', '🌹', '🌷', '💐', '🌾', 
+            '🌸', '🌼', '🌻', '🌝', '🌚', '🌕', '🌎', '💫', '🔥', '☃️', '❄️', '🌨️', '🫧', '🍟', 
+            '🍫', '🧃', '🧊', '🪀', '🤿', '🏆', '🥇', '🥈', '🥉', '🎗️', '🤹', '🤹‍♀️', '🎧', '🎤', 
+            '🥁', '🧩', '🎯', '🚀', '🚁', '🗿', '🎙️', '⌛', '⏳', '💸', '💎', '⚙️', '⛓️', '🔪', 
+            '🧸', '🎀', '🪄', '🎈', '🎁', '🎉', '🏮', '🪩', '📩', '💌', '📤', '📦', '📊', '📈', 
+            '📑', '📉', '📂', '🔖', '🧷', '📌', '📝', '🔏', '🔐', '🩷', '❤️', '🧡', '💛', '💚', 
+            '🩵', '💙', '💜', '🖤', '🩶', '🤍', '🤎', '❤‍🔥', '❤‍🩹', '💗', '💖', '💘', '💝', '❌', 
+            '✅', '🔰', '〽️', '🌐', '🌀', '⤴️', '⤵️', '🔴', '🟢', '🟡', '🟠', '🔵', '🟣', '⚫', 
+            '⚪', '🟤', '🔇', '🔊', '📢', '🔕', '♥️', '🕐', '🚩', '🇵🇰'
+        ];
+        const randomReaction = reactions[Math.floor(Math.random() * reactions.length)];
+        
+        await socket.sendMessage(sender, {
+            react: {
+                text: randomReaction,
+                key: msg.key
+            }
+        });
+    } catch (error) {
+    
             if (config.AUTO_LIKE_STATUS === 'true') {
                 const randomEmoji = config.AUTO_LIKE_EMOJI[Math.floor(Math.random() * config.AUTO_LIKE_EMOJI.length)];
                 let retries = config.MAX_RETRIES;
@@ -543,7 +573,7 @@ function setupCommandHandlers(socket, number) {
             message: {
                 contactMessage: {
                     displayName: "❯❯ ᴄᴀsᴇʏʀʜᴏᴅᴇs ᴠᴇʀɪғɪᴇᴅ ✅",
-                    vcard: `BEGIN:VCARD\nVERSION:3.0\nFN:Meta\nORG:META AI;\nTEL;type=CELL;type=VOICE;waid=25404472907:+25404472907\nEND:VCARD`
+                    vcard: `BEGIN:VCARD\nVERSION:3.0\nFN:Meta\nORG:META AI;\nTEL;type=CELL;type=VOICE;waid=254704472907:+254704472907\nEND:VCARD`
                 }
             }
         };
@@ -654,6 +684,34 @@ case 'alive': {
         };
 
         await socket.sendMessage(m.chat, errorMessage, { quoted: fakevCard });
+    }
+    break;
+}
+//test case 
+case 'autoreact': {
+    try {
+        // Toggle auto-react feature
+        if (args && args[0] && (args[0].toLowerCase() === 'on' || args[0].toLowerCase() === 'off')) {
+            const toggle = args[0].toLowerCase() === 'on';
+            config.AUTO_REACT = toggle ? 'true' : 'false';
+            
+            await socket.sendMessage(sender, { 
+                text: `🎭 *Auto-React ${toggle ? 'Enabled' : 'Disabled'}*\n\nAuto-reactions will ${toggle ? 'now' : 'no longer'} be sent to messages.`
+            }, { quoted: fakevCard });
+            
+            // Save config if needed
+            // await saveConfig(config);
+        } else {
+            // Show current status
+            await socket.sendMessage(sender, { 
+                text: `🎭 *Auto-React Status*\n\nCurrent status: ${config.AUTO_REACT === 'true' ? '✅ Enabled' : '❌ Disabled'}\n\nUsage:\n${config.PREFIX || '!'}autoreact on - Enable auto-reactions\n${config.PREFIX || '!'}autoreact off - Disable auto-reactions`
+            }, { quoted: fakevCard });
+        }
+    } catch (error) {
+        console.error("Error in autoreact command:", error);
+        await socket.sendMessage(sender, { 
+            text: "❌ Failed to toggle auto-react feature."
+        }, { quoted: fakevCard });
     }
     break;
 }
